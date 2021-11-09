@@ -2,7 +2,7 @@
 
 set -e
 
-# ls /home/ipads/musl-cross-make-0.9.9/install
+ls /home/ipads/musl-cross-make-0.9.9/install
 
 echo `pwd`
 

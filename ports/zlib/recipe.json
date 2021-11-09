@@ -6,21 +6,21 @@
     "source_files": [
         {
             "url": "http://192.168.10.245:20002/source/zlib-v$CHPM_PKG_VERSION.tar.gz",
-            "extract_dir": "zlib-v$CHPM_PKG_VERSION",
-            "sha256": "TODO"
+            "name": "zlib-v$CHPM_PKG_VERSION.tar.gz",
+            "extract_dir": "zlib-v$CHPM_PKG_VERSION"
         }
     ],
     "prebuilt_files": {
         "aarch64": [],
         "x86_64": []
     },
-    "docker_builder": "richardchien/chcore_builder:v3.0",
+    "docker_builder": "ipads/chcore_builder:v3.0",
     "working_dir": "$CHPM_BUILD_DIR/zlib-v$CHPM_PKG_VERSION",
     "build": [
         "$CHPM_RECIPE_DIR/build.sh"
     ],
     "install": [
-        "echo install!!"
+        "make install"
     ],
     "install_prebuilt": []
 }
