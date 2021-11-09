@@ -1,0 +1,19 @@
+{
+    "name": "python3",
+    "version": "3.8.7",
+    "description": "CPython ported to ChCore",
+    "dependencies": [
+        "zlib"
+    ],
+    "source_files": [],
+    "prebuilt_files": {
+        "aarch64": [],
+        "x86_64": []
+    },
+    "docker_builder": "richardchien/chcore_builder:v3.0-for-py-1",
+    "working_dir": "$CHPM_BUILD_DIR/python3",
+    "configure": [],
+    "build": [],
+    "install": [],
+    "install_prebuilt": []
+}

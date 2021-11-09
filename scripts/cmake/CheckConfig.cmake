@@ -1,0 +1,63 @@
+#[[
+Check if all cache variables defined in `Config.cmake`
+are set in `.config`, and if not, ask user to set them.
+
+This script is intended to be used as -C option of
+cmake command after `-C LoadConfig.cmake`.
+#]]
+
+set(_input_sh ${CMAKE_CURRENT_LIST_DIR}/Helpers/input.sh)
+
+# Ask user for input
+function(_ask_for_input _prompt _result)
+    execute_process(
+        COMMAND bash ${_input_sh} ${_prompt}
+        ERROR_VARIABLE _tmp
+        ERROR_STRIP_TRAILING_WHITESPACE)
+    set(${_result}
+        ${_tmp}
+        PARENT_SCOPE)
+endfunction()
+
+# Ask user for yes or no
+function(_ask_for_yn _prompt _default _yn_var)
+    while(1)
+        _ask_for_input(${_prompt} _result)
+        if("${_result}" MATCHES "^(y|Y)")
+            set(${_yn_var}
+                "y"
+                PARENT_SCOPE)
+        elseif("${_result}" MATCHES "^(n|N)")
+            set(${_yn_var}
+                "n"
+                PARENT_SCOPE)
+        elseif("${_result}" STREQUAL "")
+            set(${_yn_var}
+                ${_default}
+                PARENT_SCOPE)
+        else()
+            execute_process(COMMAND echo "Invalid input!")
+            continue()
+        endif()
+        break()
+    endwhile()
+endfunction()
+
+# Hook the `chcore_config` macro to check for config items that aren't set
+macro(chcore_config _config_name _config_type _default _description)
+    if(NOT DEFINED ${_config_name})
+        _ask_for_yn(
+            "${_config_name} is not set, use default (${_default})? (Y/n)" "y"
+            _answer)
+        set(_value ${_default})
+        if(NOT "${_answer}" STREQUAL "y")
+            _ask_for_input("Enter a value for ${_config_name}:" _value)
+        endif()
+        set(${_config_name}
+            ${_value}
+            CACHE ${_config_type} "" FORCE)
+    endif()
+endmacro()
+
+# Include the top-level config definition file
+include(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake)

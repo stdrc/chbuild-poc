@@ -1,0 +1,20 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "test library",
+    "dependencies": [],
+    "source_files": [],
+    "prebuilt_files": {
+        "aarch64": [],
+        "x86_64": []
+    },
+    "docker_builder": "ipads/chcore_builder:v3.0",
+    "working_dir": "$CHPM_BUILD_DIR",
+    "build": [
+        "$CHPM_RECIPE_DIR/build.sh"
+    ],
+    "install": [
+        "echo \"Install $CHPM_PKG_NAME!!\""
+    ],
+    "install_prebuilt": []
+}

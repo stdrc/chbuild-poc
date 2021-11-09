@@ -1,0 +1,105 @@
+#!/bin/bash
+
+self=$0
+
+defconfig_command="$self defconfig"
+clean_command="$self clean"
+
+cmake_build_dir="build"
+cmake_cache_file="build/CMakeCache.txt"
+config_file=".config"
+
+check_config_opt="-C scripts/cmake/CheckConfig.cmake"
+
+_config() {
+    echo "Configuring CMake..."
+    cmake -B $cmake_build_dir -C scripts/cmake/LoadConfig.cmake $@
+    _sync_cache_with_config
+}
+
+_config_with_check() {
+    _config $check_config_opt
+}
+
+_sync_cache_with_config() {
+    cmake -L -N -B $cmake_build_dir | grep ^CHCORE_ >$config_file
+}
+
+defconfig() {
+    if [ -d $cmake_build_dir ]; then
+        echo "There exists a build directory, please run \`$clean_command\` first"
+        exit 1
+    fi
+
+    if [ -z "$1" ]; then
+        plat="raspi3"
+    else
+        plat="$1"
+    fi
+
+    echo "Generating default config file for \`$plat\` platform..."
+    cp defconfigs/${plat}.config $config_file
+    echo "Default config written to \`$config_file\` file."
+
+    _config_with_check
+}
+
+config() {
+    if [ ! -f $config_file ]; then
+        echo "There is no \`.config\` file, please run \`$defconfig_command\` first"
+        exit 1
+    fi
+
+    _config_with_check
+}
+
+menuconfig() {
+    if [ ! -f $config_file ]; then
+        echo "There is no \`.config\` file, please run \`$defconfig_command\` first"
+        exit 1
+    fi
+
+    _config
+
+    echo
+    echo "Note: In the menu config view, press C to save, Q to quit."
+    read -p "Now press Enter to continue..."
+
+    ccmake -B $cmake_build_dir
+    _sync_cache_with_config
+
+    echo "Config saved to \`$config_file\` file."
+}
+
+build() {
+    if [ ! -f $config_file ]; then
+        echo "There is no \`.config\` file, please run \`$defconfig_command\` first"
+        exit 1
+    fi
+
+    _config_with_check
+
+    echo "Building..."
+    cmake --build $cmake_build_dir --target all
+}
+
+clean() {
+    echo "Cleaning..."
+    rm -rf $cmake_build_dir
+}
+
+distclean() {
+    echo "Dist cleaning..."
+    rm -rf $cmake_build_dir $config_file
+}
+
+help() {
+    echo "help!!"
+}
+
+if [ $# -eq 0 ]; then
+    help
+    exit 1
+fi
+
+$@

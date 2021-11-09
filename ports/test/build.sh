@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+# ls /home/ipads/musl-cross-make-0.9.9/install
+
+echo `pwd`
+
+echo "CHPM_PKG_NAME: $CHPM_PKG_NAME"
+echo "CHPM_PKG_VERSION: $CHPM_PKG_VERSION"
+
+echo "CHPM_RECIPE_FILE: $CHPM_RECIPE_FILE"
+echo "CHPM_RECIPE_DIR: $CHPM_RECIPE_DIR"
+
+echo "CHPM_BUILD_DIR: $CHPM_BUILD_DIR"
+
+echo "CHPM_TARGET_ARCH: $CHPM_TARGET_ARCH"
+echo "CHPM_TARGET_PREFIX: $CHPM_TARGET_PREFIX"
