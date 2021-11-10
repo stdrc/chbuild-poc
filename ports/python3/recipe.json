@@ -2,7 +2,10 @@
     "name": "python3",
     "version": "3.8.7",
     "description": "Interactive high-level object-oriented language",
-    "dependencies": [],
+    "dependencies": [
+        "zlib",
+        "libffi"
+    ],
     "source_files": [
         {
             "url": "http://192.168.10.245:20002/source/python3/Python-$CHPM_PKG_VERSION.tar.xz",
