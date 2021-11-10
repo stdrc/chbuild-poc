@@ -200,14 +200,16 @@ def download_and_extract_files(
     files: List[File], downloads_dir: str, build_dir: str
 ) -> bool:
     for file in files:
+        print_info(f"Downloading {file.name} from {file.url}...")
         local_file = download_file(file, downloads_dir)
         if not local_file:
-            print_err("Failed to download source file", file.name, "from", file.url)
+            print_err("Failed to download", file.name, "from", file.url)
             return False
+        print_info(f"Extracting {file.name} to {file.extract_dir}...")
         extract_dir = extract_file(file, local_file, build_dir)
         if not extract_dir:
             print_err(
-                "Failed to extract source file",
+                "Failed to extract",
                 file.name,
                 "to",
                 file.extract_dir,
