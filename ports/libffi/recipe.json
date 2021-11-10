@@ -20,7 +20,7 @@
         "$CHPM_RECIPE_DIR/build.sh"
     ],
     "install": [
-        "$CHPM_RECIPE_DIR/install.sh"
+        "source $CHPM_RECIPE_DIR/../musl_common.sh && make install"
     ],
     "install_prebuilt": []
 }

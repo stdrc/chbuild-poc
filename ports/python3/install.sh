@@ -1,9 +1,7 @@
 #!/bin/bash
 
 set -e
-
-MUSL_CROSS_MAKE_INSTALL_DIR=/home/ipads/musl-cross-make-0.9.9/install
-export PATH="$MUSL_CROSS_MAKE_INSTALL_DIR/bin:$PATH"
+source $CHPM_RECIPE_DIR/../musl_common.sh
 
 export PYTHONPATH=$CHPM_RECIPE_DIR/pylibs
 BUILD_PYTHON="$(pwd)/build-pfb/install/bin/python3"

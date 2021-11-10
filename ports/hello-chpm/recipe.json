@@ -1,7 +1,7 @@
 {
-    "name": "test",
+    "name": "hello-chpm",
     "version": "1.0.0",
-    "description": "test library",
+    "description": "Test program for ChPM",
     "dependencies": [],
     "source_files": [],
     "prebuilt_files": {
@@ -14,7 +14,8 @@
         "$CHPM_RECIPE_DIR/build.sh"
     ],
     "install": [
-        "echo \"Install $CHPM_PKG_NAME!!\""
+        "mkdir -p $CHPM_TARGET_PREFIX/bin",
+        "cp $CHPM_BUILD_DIR/hello-chpm $CHPM_TARGET_PREFIX/bin/"
     ],
     "install_prebuilt": []
 }
