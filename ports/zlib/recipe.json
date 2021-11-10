@@ -5,9 +5,9 @@
     "dependencies": [],
     "source_files": [
         {
-            "url": "http://192.168.10.245:20002/source/zlib-v$CHPM_PKG_VERSION.tar.gz",
-            "name": "zlib-v$CHPM_PKG_VERSION.tar.gz",
-            "extract_dir": "zlib-v$CHPM_PKG_VERSION"
+            "url": "https://www.zlib.net/zlib-$CHPM_PKG_VERSION.tar.xz",
+            "name": "zlib-$CHPM_PKG_VERSION.tar.xz",
+            "extract_dir": "zlib-$CHPM_PKG_VERSION"
         }
     ],
     "prebuilt_files": {
@@ -15,7 +15,7 @@
         "x86_64": []
     },
     "docker_builder": "ipads/chcore_builder:v3.0",
-    "working_dir": "$CHPM_BUILD_DIR/zlib-v$CHPM_PKG_VERSION",
+    "working_dir": "$CHPM_BUILD_DIR/zlib-$CHPM_PKG_VERSION",
     "build": [
         "$CHPM_RECIPE_DIR/build.sh"
     ],

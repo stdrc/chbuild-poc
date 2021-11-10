@@ -19,7 +19,7 @@ import sys
 import json
 import shutil
 import subprocess
-import mimetypes
+import zipfile
 
 from os import path
 from pprint import pprint
@@ -155,34 +155,44 @@ def download_file(file: File, downloads_dir: str) -> Optional[str]:
 
 
 def extract_file(file: File, local_file: str, build_dir: str) -> Optional[str]:
-    mime_types = mimetypes.guess_type(local_file)
-    print_dbg("mime_types:", mime_types)
-    if not mime_types:
-        return None
-
+    tmp_extract_dir = path.join(build_dir, file.extract_dir + "_tmp")
     extract_dir = path.join(build_dir, file.extract_dir)
+    print_dbg("tmp_extract_dir:", tmp_extract_dir)
     print_dbg("extract_dir:", extract_dir)
-    os.mkdir(extract_dir)
+    os.mkdir(tmp_extract_dir)
 
-    extract_cmd = []
-    if mime_types[0] == "application/x-tar":
-        extract_cmd.append("tar")
-        if len(mime_types) > 1:
-            if mime_types[1] == "gzip":
-                extract_cmd.append("zxf")
-            else:
-                return None
-        else:
-            extract_cmd.append("xf")
-        extract_cmd.extend([local_file, "-C", extract_dir])
+    class ZipFileWithPermissions(zipfile.ZipFile):
+        def _extract_member(self, member, targetpath, pwd):
+            if not isinstance(member, zipfile.ZipInfo):
+                member = self.getinfo(member)
+
+            super_extract_member = getattr(super(), "_extract_member")
+            targetpath = super_extract_member(member, targetpath, pwd)
+
+            attr = member.external_attr >> 16
+            if attr != 0:
+                os.chmod(targetpath, attr)
+            return targetpath
+
+    def unpack_zip(filename: str, extract_dir: str):
+        with ZipFileWithPermissions(filename) as zip:
+            zip.extractall(extract_dir)
+
+    shutil.unregister_unpack_format("zip")
+    shutil.register_unpack_format("zip", [".zip"], unpack_zip)
+    try:
+        shutil.unpack_archive(local_file, tmp_extract_dir)
+    except Exception:
+        shutil.rmtree(tmp_extract_dir)
+        return None
+
+    # strip the only subdirectory if any
+    subdirs = os.listdir(tmp_extract_dir)
+    if len(subdirs) == 1 and subdirs[0] == file.extract_dir:
+        shutil.move(path.join(tmp_extract_dir, subdirs[0]), extract_dir)
+        shutil.rmtree(tmp_extract_dir)
     else:
-        return None
-
-    print_dbg("extract_cmd:", extract_cmd)
-    if subprocess.call(extract_cmd) != 0:
-        shutil.rmtree(extract_dir)
-        return None
-
+        shutil.move(tmp_extract_dir, extract_dir)
     return extract_dir
 
 
@@ -293,6 +303,8 @@ def install_recipe(recipe: Recipe):
     ok = try_install_recipe(recipe, downloads_dir, build_dir)
     if not ok:
         print_err(f"Failed to install `{recipe.name}`")
+    else:
+        print_info(f"Successfully installed `{recipe.name}`")
 
     shutil.rmtree(build_dir)
     if not ok:
