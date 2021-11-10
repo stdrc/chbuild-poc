@@ -1,0 +1,26 @@
+{
+    "name": "libffi",
+    "version": "3.4.2",
+    "description": "Foreign Function Interface library runtime",
+    "dependencies": [],
+    "source_files": [
+        {
+            "url": "http://192.168.10.245:20002/source/libffi/libffi-$CHPM_PKG_VERSION.tar.gz",
+            "name": "libffi-$CHPM_PKG_VERSION.tar.gz",
+            "extract_dir": "libffi-$CHPM_PKG_VERSION"
+        }
+    ],
+    "prebuilt_files": {
+        "aarch64": [],
+        "x86_64": []
+    },
+    "docker_builder": "ipads/chcore_builder:v3.0",
+    "working_dir": "$CHPM_BUILD_DIR/libffi-$CHPM_PKG_VERSION",
+    "build": [
+        "$CHPM_RECIPE_DIR/build.sh"
+    ],
+    "install": [
+        "$CHPM_RECIPE_DIR/install.sh"
+    ],
+    "install_prebuilt": []
+}

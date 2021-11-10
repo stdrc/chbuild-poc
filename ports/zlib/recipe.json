@@ -5,7 +5,7 @@
     "dependencies": [],
     "source_files": [
         {
-            "url": "https://www.zlib.net/zlib-$CHPM_PKG_VERSION.tar.xz",
+            "url": "http://192.168.10.245:20002/source/zlib/zlib-$CHPM_PKG_VERSION.tar.xz",
             "name": "zlib-$CHPM_PKG_VERSION.tar.xz",
             "extract_dir": "zlib-$CHPM_PKG_VERSION"
         }

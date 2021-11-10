@@ -15,12 +15,9 @@ else
     exit 1
 fi
 
-CC=${CROSS_COMPILE}gcc \
-    CXX=${CROSS_COMPILE}g++ \
-    AR=${CROSS_COMPILE}ar \
-    NM=${CROSS_COMPILE}nm \
-    LD=${CROSS_COMPILE}ld \
-    RANLIB=${CROSS_COMPILE}ranlib \
-    ./configure --prefix=$CHPM_TARGET_PREFIX
+./configure \
+    --host=$(${CROSS_COMPILE}gcc -dumpmachine) \
+    --prefix=$CHPM_TARGET_PREFIX \
+    --disable-docs
 
 make -j$(nproc)

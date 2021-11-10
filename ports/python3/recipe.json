@@ -1,19 +1,26 @@
 {
     "name": "python3",
     "version": "3.8.7",
-    "description": "CPython ported to ChCore",
-    "dependencies": [
-        "zlib"
+    "description": "Interactive high-level object-oriented language",
+    "dependencies": [],
+    "source_files": [
+        {
+            "url": "http://192.168.10.245:20002/source/python3/Python-$CHPM_PKG_VERSION.tar.xz",
+            "name": "Python-$CHPM_PKG_VERSION.tar.xz",
+            "extract_dir": "Python-$CHPM_PKG_VERSION"
+        }
     ],
-    "source_files": [],
     "prebuilt_files": {
         "aarch64": [],
         "x86_64": []
     },
     "docker_builder": "richardchien/chcore_builder:v3.0-for-py-1",
-    "working_dir": "$CHPM_BUILD_DIR/python3",
-    "configure": [],
-    "build": [],
-    "install": [],
+    "working_dir": "$CHPM_BUILD_DIR/Python-$CHPM_PKG_VERSION",
+    "build": [
+        "$CHPM_RECIPE_DIR/build.sh"
+    ],
+    "install": [
+        "$CHPM_RECIPE_DIR/install.sh"
+    ],
     "install_prebuilt": []
 }
