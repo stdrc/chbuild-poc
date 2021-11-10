@@ -391,6 +391,16 @@ def subcommand_install(args: Namespace):
         install_recipe(recipe, args.prefix)
 
 
+@subcommand("list")
+def subcommand_list(args: Namespace):
+    prefix = path.abspath(args.prefix)
+    pkginfos = read_all_pkginfos(prefix)
+    if pkginfos:
+        print_info("Installed packages:\n")
+    for pkginfo in pkginfos:
+        print_info(f"{pkginfo.name}={pkginfo.version}")
+
+
 @subcommand("config")
 def subcommand_config(args: Namespace):
     pass
@@ -443,6 +453,15 @@ def create_argparser() -> ArgumentParser:
         "-a", "--arch", dest="arch", help="target architecture", required=True
     )
     parser_install.add_argument("packages", nargs="+", help="packages to install")
+
+    parser_list = subparsers.add_parser("list", help="list installed package")
+    parser_list.add_argument(
+        "-p",
+        "--prefix",
+        dest="prefix",
+        required=True,
+        help="prefix of install destination",
+    )
 
     parser_config = subparsers.add_parser("config", help="change config")
 
