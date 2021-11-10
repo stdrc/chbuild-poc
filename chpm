@@ -39,6 +39,7 @@ PORTS_DIR = path.join(CHCORE_DIR, "ports")
 CHPM_DIR = path.join(CHCORE_DIR, ".chpm")
 BUILD_DIR = path.join(CHPM_DIR, "build")
 DOWNLOADS_DIR = path.join(CHPM_DIR, "downloads")
+PKGINFO_DIR_NAME = "chpm-pkginfo"
 
 
 @dataclass
@@ -139,6 +140,55 @@ def read_recipe(package_name: str, arch: str) -> Recipe:
     recipe.install = get_arch_aware_list(recipe_json, "install", arch)
     recipe.install_prebuilt = get_arch_aware_list(recipe_json, "install_prebuilt", arch)
     return recipe
+
+
+@dataclass
+class PkgInfo:
+    name: str
+    version: str
+    description: str
+    dependencies: List["str"]
+    is_dependency: bool
+    # installed_files: List[str] # TODO
+
+
+def read_pkginfo(recipe: Recipe, prefix: str) -> Optional[PkgInfo]:
+    pkginfo_file = path.join(prefix, PKGINFO_DIR_NAME, f"{recipe.name}.json")
+    if not path.exists(pkginfo_file):
+        return None
+
+    with open(pkginfo_file, "r", encoding="utf-8") as f:
+        pkginfo_json = json.load(f)
+    return PkgInfo(**pkginfo_json)
+
+
+def read_all_pkginfos(prefix: str) -> List[PkgInfo]:
+    pkginfo_dir = path.join(prefix, PKGINFO_DIR_NAME)
+    if not path.exists(pkginfo_dir):
+        return []
+
+    pkginfos = []
+    for file in os.listdir(pkginfo_dir):
+        with open(path.join(pkginfo_dir, file), "r", encoding="utf-8") as f:
+            pkginfo_json = json.load(f)
+            pkginfos.append(PkgInfo(**pkginfo_json))
+    return pkginfos
+
+
+def write_pkginfo(recipe: Recipe, is_dependency: bool, prefix: str):
+    pkginfo_dir = path.join(prefix, PKGINFO_DIR_NAME)
+    pkginfo_file = path.join(pkginfo_dir, f"{recipe.name}.json")
+    os.makedirs(pkginfo_dir, exist_ok=True)
+    deps = [d.name for d in recipe.dependencies]
+    pkginfo = PkgInfo(
+        name=recipe.name,
+        version=recipe.version,
+        description=recipe.description,
+        dependencies=deps,
+        is_dependency=is_dependency,
+    )
+    with open(pkginfo_file, "w", encoding="utf-8") as f:
+        json.dump(pkginfo.__dict__, f, indent=4)
 
 
 def download_file(file: File, downloads_dir: str) -> Optional[str]:
@@ -286,9 +336,13 @@ def try_install_recipe(recipe: Recipe, downloads_dir: str, build_dir: str) -> bo
     return True
 
 
-def install_recipe(recipe: Recipe):
+def install_recipe(recipe: Recipe, prefix: str, is_dependency: bool = False):
+    if read_pkginfo(recipe, prefix):
+        print_info(f"`{recipe.name}` is already installed")
+        return
+
     for dep in recipe.dependencies:
-        install_recipe(dep)
+        install_recipe(dep, prefix, is_dependency=True)
 
     print_info(f"Installing `{recipe.name}`...")
 
@@ -303,13 +357,13 @@ def install_recipe(recipe: Recipe):
     print_dbg("build_dir:", build_dir)
 
     ok = try_install_recipe(recipe, downloads_dir, build_dir)
-    if not ok:
-        print_err(f"Failed to install `{recipe.name}`")
-    else:
-        print_info(f"Successfully installed `{recipe.name}`")
-
     shutil.rmtree(build_dir)
-    if not ok:
+
+    if ok:
+        write_pkginfo(recipe, is_dependency, prefix)
+        print_info(f"Successfully installed `{recipe.name}`")
+    else:
+        print_err(f"Failed to install `{recipe.name}`")
         exit(1)
 
 
@@ -334,7 +388,7 @@ def subcommand_install(args: Namespace):
     for package_name in args.packages:
         recipe = read_recipe(package_name, arch)
         print_dbg("recipe:", recipe)
-        install_recipe(recipe)
+        install_recipe(recipe, args.prefix)
 
 
 @subcommand("config")
