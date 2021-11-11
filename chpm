@@ -272,6 +272,61 @@ def eval_env_vars(s: str) -> str:
     return subprocess.check_output(["bash", "-c", f'echo -n "{s}"']).decode()
 
 
+def try_install_recipe_from_prebuilt(
+    recipe: Recipe,
+    downloads_dir: str,
+    build_dir: str,
+    cmd_prefix: List[str],
+    working_dir: str,
+):
+    if not download_and_extract_files(recipe.prebuilt_files, downloads_dir, build_dir):
+        return False
+
+    print_info("Installing from prebuilt files...")
+    for install_cmd in recipe.install_prebuilt:
+        cmd = cmd_prefix + ["bash", "-c", f"cd {working_dir} && " + install_cmd]
+        print_dbg("cmd:", cmd)
+        ret = subprocess.call(cmd)
+        if ret != 0:
+            print_err("Failed to run install prebuilt command")
+            return False
+
+    return True
+
+
+def try_install_recipe_from_source(
+    recipe: Recipe,
+    downloads_dir: str,
+    build_dir: str,
+    cmd_prefix: List[str],
+    working_dir: str,
+) -> bool:
+    if not download_and_extract_files(recipe.source_files, downloads_dir, build_dir):
+        return False
+
+    print_info("Installing from source files...")
+
+    print_info("Running build commands...")
+    for build_cmd in recipe.build:
+        cmd = cmd_prefix + ["bash", "-c", f"cd {working_dir} && " + build_cmd]
+        print_dbg("cmd:", cmd)
+        ret = subprocess.call(cmd)
+        if ret != 0:
+            print_err("Failed to run build command")
+            return False
+
+    print_info("Running install commands...")
+    for install_cmd in recipe.install:
+        cmd = cmd_prefix + ["bash", "-c", f"cd {working_dir} && " + install_cmd]
+        print_dbg("cmd:", cmd)
+        ret = subprocess.call(cmd)
+        if ret != 0:
+            print_err("Failed to run install command")
+            return False
+
+    return True
+
+
 def try_install_recipe(recipe: Recipe, downloads_dir: str, build_dir: str) -> bool:
     os.environ["CHPM_RECIPE_FILE"] = recipe.file
     os.environ["CHPM_RECIPE_DIR"] = path.dirname(recipe.file)
@@ -284,11 +339,6 @@ def try_install_recipe(recipe: Recipe, downloads_dir: str, build_dir: str) -> bo
         file.name = eval_env_vars(file.name)
         file.extract_dir = eval_env_vars(file.extract_dir)
     recipe.working_dir = eval_env_vars(recipe.working_dir)
-
-    if not download_and_extract_files(recipe.source_files, downloads_dir, build_dir):
-        return False
-    if not download_and_extract_files(recipe.prebuilt_files, downloads_dir, build_dir):
-        return False
 
     cmd_prefix = []
     if recipe.docker_builder:
@@ -315,25 +365,13 @@ def try_install_recipe(recipe: Recipe, downloads_dir: str, build_dir: str) -> bo
     working_dir = recipe.working_dir
     print_dbg("working_dir:", recipe.working_dir)
 
-    print_info("Running build commands...")
-    for build_cmd in recipe.build:
-        cmd = cmd_prefix + ["bash", "-c", f"cd {working_dir} && " + build_cmd]
-        print_dbg("cmd:", cmd)
-        ret = subprocess.call(cmd)
-        if ret != 0:
-            print_err("Failed to run build command")
-            return False
-
-    print_info("Running install commands...")
-    for install_cmd in recipe.install:
-        cmd = cmd_prefix + ["bash", "-c", f"cd {working_dir} && " + install_cmd]
-        print_dbg("cmd:", cmd)
-        ret = subprocess.call(cmd)
-        if ret != 0:
-            print_err("Failed to run install command")
-            return False
-
-    return True
+    if recipe.install_prebuilt:
+        return try_install_recipe_from_prebuilt(
+            recipe, downloads_dir, build_dir, cmd_prefix, working_dir
+        )
+    return try_install_recipe_from_source(
+        recipe, downloads_dir, build_dir, cmd_prefix, working_dir
+    )
 
 
 def install_recipe(recipe: Recipe, prefix: str, is_dependency: bool = False):
