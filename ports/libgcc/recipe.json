@@ -1,0 +1,20 @@
+{
+    "name": "libgcc",
+    "version": "9.2.0",
+    "description": "GCC support library",
+    "dependencies": [],
+    "source_files": [],
+    "prebuilt_files": [
+        {
+            "url": "http://192.168.10.245:20002/prebuilt/libgcc/$CHPM_TARGET_ARCH/libgcc-$CHPM_PKG_VERSION.tar.xz",
+            "name": "libgcc-$CHPM_PKG_VERSION.tar.xz",
+            "extract_dir": "libgcc-$CHPM_PKG_VERSION"
+        }
+    ],
+    "working_dir": "$CHPM_BUILD_DIR/libgcc-$CHPM_PKG_VERSION",
+    "build": [],
+    "install": [],
+    "install_prebuilt": [
+        "cp -r lib $CHPM_TARGET_PREFIX"
+    ]
+}
