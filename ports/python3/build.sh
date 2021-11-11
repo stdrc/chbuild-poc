@@ -33,7 +33,7 @@ CPPFLAGS="-I$CHPM_TARGET_PREFIX/include" LDFLAGS="-L$CHPM_TARGET_PREFIX/lib" \
     --disable-ipv6 \
     --disable-shared \
     --enable-optimizations \
-    --with-ensurepip=no \
+    --without-ensurepip \
     ac_cv_file__dev_ptc=no \
     ac_cv_file__dev_ptmx=no \
     PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib:$(srcdir)/Lib/$(PLATDIR) ../build-pfb/install/bin/python3'
