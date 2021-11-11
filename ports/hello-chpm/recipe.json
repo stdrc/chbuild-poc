@@ -14,8 +14,8 @@
         "$CHPM_RECIPE_DIR/build.sh"
     ],
     "install": [
-        "mkdir -p $CHPM_TARGET_PREFIX/bin",
-        "cp $CHPM_BUILD_DIR/hello-chpm $CHPM_TARGET_PREFIX/bin/"
+        "mkdir -p $CHPM_TARGET_PREFIX/apps",
+        "cp $CHPM_BUILD_DIR/hello-chpm $CHPM_TARGET_PREFIX/apps"
     ],
     "install_prebuilt": []
 }

@@ -23,10 +23,10 @@
         "mkdir -p $CHPM_TARGET_PREFIX/lib",
         "cp sysroot/lib/*.so* $CHPM_TARGET_PREFIX/lib",
         "cp install/lib/*.so* $CHPM_TARGET_PREFIX/lib",
-        "mkdir -p $CHPM_TARGET_PREFIX/bin/ros2-demo",
-        "cp -r install/lib/demo_nodes_cpp/* $CHPM_TARGET_PREFIX/bin/ros2-demo",
-        "cp -r install/lib/examples_rclcpp_minimal_action_client/* $CHPM_TARGET_PREFIX/bin/ros2-demo",
-        "cp -r install/lib/examples_rclcpp_minimal_action_server/* $CHPM_TARGET_PREFIX/bin/ros2-demo"
+        "mkdir -p $CHPM_TARGET_PREFIX/apps/ros2",
+        "cp -r install/lib/demo_nodes_cpp/* $CHPM_TARGET_PREFIX/apps/ros2",
+        "cp -r install/lib/examples_rclcpp_minimal_action_client/* $CHPM_TARGET_PREFIX/apps/ros2",
+        "cp -r install/lib/examples_rclcpp_minimal_action_server/* $CHPM_TARGET_PREFIX/apps/ros2"
     ],
     "install_prebuilt": []
 }
