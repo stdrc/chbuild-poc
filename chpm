@@ -5,13 +5,13 @@
 # CHPM_TARGET_ARCH    目标编译架构
 # CHPM_TARGET_PREFIX  目标安装位置
 #
-# CHPM_RECIPE_FILE    recipe 文件路径
-# CHPM_RECIPE_DIR     recipe 文件目录路径
+# CHPM_RECIPE_FILE    recipe 文件路径 (ports/<package>/recipe.json)
+# CHPM_RECIPE_DIR     recipe 文件目录路径 (ports/<package>)
 #
 # CHPM_PKG_NAME       正在安装的包名
 # CHPM_PKG_VERSION    正在安装的包版本
 #
-# CHPM_BUILD_DIR      临时构建目录
+# CHPM_BUILD_DIR      临时构建目录 (.chpm/build/<package>)
 #
 
 import os
