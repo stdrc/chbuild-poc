@@ -13,10 +13,6 @@
             "extract_dir": "Python-$CHPM_PKG_VERSION"
         }
     ],
-    "prebuilt_files": {
-        "aarch64": [],
-        "x86_64": []
-    },
     "docker_builder": "richardchien/chcore_builder:v3.0-for-py-1",
     "working_dir": "$CHPM_BUILD_DIR/Python-$CHPM_PKG_VERSION",
     "build": [
@@ -24,6 +20,5 @@
     ],
     "install": [
         "$CHPM_RECIPE_DIR/install.sh"
-    ],
-    "install_prebuilt": []
+    ]
 }

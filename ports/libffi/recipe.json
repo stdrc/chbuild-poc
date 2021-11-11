@@ -10,10 +10,6 @@
             "extract_dir": "libffi-$CHPM_PKG_VERSION"
         }
     ],
-    "prebuilt_files": {
-        "aarch64": [],
-        "x86_64": []
-    },
     "docker_builder": "ipads/chcore_builder:v3.0",
     "working_dir": "$CHPM_BUILD_DIR/libffi-$CHPM_PKG_VERSION",
     "build": [
@@ -21,6 +17,5 @@
     ],
     "install": [
         "source $CHPM_RECIPE_DIR/../musl_common.sh && make install"
-    ],
-    "install_prebuilt": []
+    ]
 }

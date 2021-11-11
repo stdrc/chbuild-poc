@@ -10,10 +10,6 @@
             "extract_dir": "ros2"
         }
     ],
-    "prebuilt_files": {
-        "aarch64": [],
-        "x86_64": []
-    },
     "docker_builder": "ipads/chcore_builder:v1.2-for-ros-build",
     "working_dir": "$CHPM_BUILD_DIR",
     "build": [
@@ -27,6 +23,5 @@
         "cp -r install/lib/demo_nodes_cpp/* $CHPM_TARGET_PREFIX/apps/ros2",
         "cp -r install/lib/examples_rclcpp_minimal_action_client/* $CHPM_TARGET_PREFIX/apps/ros2",
         "cp -r install/lib/examples_rclcpp_minimal_action_server/* $CHPM_TARGET_PREFIX/apps/ros2"
-    ],
-    "install_prebuilt": []
+    ]
 }

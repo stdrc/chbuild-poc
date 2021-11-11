@@ -5,7 +5,6 @@
     "dependencies": [
         "libgcc"
     ],
-    "source_files": [],
     "prebuilt_files": [
         {
             "url": "http://192.168.10.245:20002/prebuilt/libstdc++/$CHPM_TARGET_ARCH/libstdc++-$CHPM_PKG_VERSION.tar.xz",
@@ -14,8 +13,6 @@
         }
     ],
     "working_dir": "$CHPM_BUILD_DIR/libstdc++-$CHPM_PKG_VERSION",
-    "build": [],
-    "install": [],
     "install_prebuilt": [
         "cp -r lib $CHPM_TARGET_PREFIX"
     ]
