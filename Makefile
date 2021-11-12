@@ -1,4 +1,4 @@
-build_entry := ./scripts/entry.sh
+build_entry := ./chbuild
 
 .PHONY: defconfig %_defconfig config build clean distclean
 
