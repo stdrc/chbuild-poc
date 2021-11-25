@@ -9,6 +9,6 @@ include(Config.cmake)
 
 message(STATUS "CHCORE_ARCH: ${CHCORE_ARCH}")
 message(STATUS "CHCORE_PLAT: ${CHCORE_PLAT}")
-message(STATUS "CHCORE_VIRTUALIZATION: ${CHCORE_VIRTUALIZATION}")
+message(STATUS "CHCORE_VIRT: ${CHCORE_VIRT}")
 
 add_subdirectory(kernel)

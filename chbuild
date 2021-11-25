@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 self=$0
 
 defconfig_command="$self defconfig"

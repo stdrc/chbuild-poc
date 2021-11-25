@@ -55,9 +55,9 @@ macro(chcore_config _config_name _config_type _default _description)
         endif()
         set(${_config_name}
             ${_value}
-            CACHE ${_config_type} "" FORCE)
+            CACHE ${_config_type} ${_description} FORCE)
     endif()
 endmacro()
 
 # Include the top-level config definition file
-include(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake)
+include(${CMAKE_SOURCE_DIR}/Config.cmake)

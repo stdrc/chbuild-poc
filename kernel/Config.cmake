@@ -1,1 +1,1 @@
-chcore_config(CHCORE_VIRTUALIZATION BOOL OFF "Enable virtualization support?")
+chcore_config(CHCORE_VIRT BOOL OFF "Enable virtualization support?")
