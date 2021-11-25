@@ -1,9 +1,10 @@
 #[[
-Check if all cache variables defined in `Config.cmake`
-are set in `.config`, and if not, ask user to set them.
+Load config values from `.config` and check if all
+cache variables defined in `config.cmake` are set,
+if not, ask user interactively.
 
 This script is intended to be used as -C option of
-cmake command after `-C LoadConfig.cmake`.
+cmake command.
 #]]
 
 set(_input_sh ${CMAKE_CURRENT_LIST_DIR}/Helpers/input.sh)
@@ -43,7 +44,6 @@ function(_ask_for_yn _prompt _default _yn_var)
     endwhile()
 endfunction()
 
-# Hook the `chcore_config` macro to check for config items that aren't set
 macro(chcore_config _config_name _config_type _default _description)
     if(NOT DEFINED ${_config_name})
         _ask_for_yn(
@@ -59,5 +59,4 @@ macro(chcore_config _config_name _config_type _default _description)
     endif()
 endmacro()
 
-# Include the top-level config definition file
-include(${CMAKE_SOURCE_DIR}/Config.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/LoadConfig.cmake)
