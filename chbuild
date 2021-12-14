@@ -11,8 +11,6 @@ cmake_build_dir="build"
 cmake_cache_file="build/CMakeCache.txt"
 config_file=".config"
 
-check_config_opt="-C scripts/cmake/CheckConfig.cmake"
-
 _config() {
     echo "Configuring CMake..."
     cmake -B $cmake_build_dir -C scripts/cmake/LoadConfig.cmake $@
